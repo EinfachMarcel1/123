@@ -1,16 +1,22 @@
 local display = false
 
-AddEventHandler('onResourceStarting', function()
-  if (LAZY.triggeron == nil) then
-    LAZY.triggeron = "lazy:daily"
-    print(LAZY.triggeron)
+AddEventHandler('onResourceStart', function()
+  TriggerEvent('gettrigger')
+  TriggerEvent(LAZY.trigger)
+end)
+
+AddEventHandler('gettrigger', function()
+  if LAZY.trigger == nil then
+    LAZY.trigger = "lazy:daily"
+    print(LAZY.trigger)
+    return LAZY.trigger
   else
-    print(LAZY.triggeron)
+    print(LAZY.trigger)
     return
   end
 end)
 
-AddEventHandler(LAZY.triggeron, function()
+AddEventHandler(LAZY.trigger, function()
     SetDisplay(not false)
 end)
 
@@ -21,3 +27,11 @@ end)
 RegisterNUICallback("main", function()
   SetDisplay(false)
 end)
+
+function SetDisplay(bool)
+  display = bool
+  SendNUIMessage({
+      type = "ui",
+      status = bool,
+  })
+end
